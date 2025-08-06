@@ -1,0 +1,16 @@
+[project]
+name = "catcmd-shared"
+version = "0.0.1"
+authors = [
+  { name="codeLupo", email="codelupo@gmail.com" },
+]
+description = "Shared code for CatCommand projects"
+readme = "README.md"
+requires-python = ">=3.13"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/codelupo/catcmd-shared"
