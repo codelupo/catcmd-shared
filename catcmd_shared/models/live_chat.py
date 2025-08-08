@@ -4,8 +4,8 @@ from datetime import datetime
 
 class ChatMsg(BaseModel):
     msg_id: str
+    id_platform: str 
     platform: Literal["twitch", "youtube", "discord"]
-    user_id: str 
     username: str
     msg: str
     timestamp:datetime
@@ -13,15 +13,17 @@ class ChatMsg(BaseModel):
 
 class ChatCmd(BaseModel):
     id: str
+    id_platform: str
     platform: Literal["twitch", "youtube", "discord"]
-    user_id: str
     username: str
     cmd: str
     timestamp: datetime
 
 class CmdDiscord(ChatCmd):
     id: Literal["discord"]
-    args: Optional[str] = None
+
+class CmdW(ChatCmd):
+    id: Literal["w"]
 
 CmdUnion = Annotated[
     Union[CmdDiscord, ],
@@ -32,7 +34,7 @@ CmdUnion = Annotated[
 class LiveChatMsg(BaseModel):
     msg_id: str
     platform: Literal["twitch", "youtube", "discord"]
-    user_id: str 
+    id_platform: str 
     username: str
     msg: str
     timestamp:datetime
