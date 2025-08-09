@@ -20,21 +20,25 @@ class ChatCmd(BaseModel):
     timestamp: datetime
 
 class CmdDiscord(ChatCmd):
-    id: Literal["discord"]
+    command: Literal["discord"]
 
 class CmdW(ChatCmd):
-    id: Literal["w"]
+    command: Literal["w"]
 
 class CmdL(ChatCmd):
-    id: Literal["l"]
+    command: Literal["l"]
 
 class CmdPoints(ChatCmd):
-    id: Literal["points"]
+    command: Literal["points"]
+
+class CmdSoundboard(ChatCmd):
+    command: Literal["soundboard"]
+    args: Optional[dict] = None
 
 
 CmdUnion = Annotated[
     Union[
-        CmdDiscord, CmdW, CmdL, CmdPoints
+        CmdDiscord, CmdW, CmdL, CmdPoints, CmdSoundboard,
     ],
     Field(discriminator="command"),
 ]
