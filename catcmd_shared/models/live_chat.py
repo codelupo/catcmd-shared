@@ -25,8 +25,17 @@ class CmdDiscord(ChatCmd):
 class CmdW(ChatCmd):
     id: Literal["w"]
 
+class CmdL(ChatCmd):
+    id: Literal["l"]
+
+class CmdPoints(ChatCmd):
+    id: Literal["points"]
+
+
 CmdUnion = Annotated[
-    Union[CmdDiscord, ],
+    Union[
+        CmdDiscord, CmdW, CmdL, CmdPoints
+    ],
     Field(discriminator="command"),
 ]
 
