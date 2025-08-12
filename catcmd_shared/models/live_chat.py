@@ -29,12 +29,15 @@ class ChatCmd(BaseModel):
     cmd: str
     timestamp: datetime
 
+    @classmethod
     def command_literal(self) -> str:
         raise NotImplementedError
 
+    @classmethod
     def parse_args(self, tail: list[str]) -> dict:
         raise NotImplementedError
     
+    @classmethod
     def from_raw(self, raw: str) -> "ChatCmd":
         parts = shlex.split(raw)
         if not parts:
