@@ -14,7 +14,7 @@ def register(cls: Type["ChatCmd"]) -> Type["ChatCmd"]:
 
 
 class ChatCmd(BaseModel):
-    cost: 0
+    cost: int = 0
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -232,7 +232,7 @@ class CmdStats(ChatCmd):
 class CmdRoulette(ChatCmd):
     command: Literal["!roulette", "!gamble"]
     amount: str
-    min = 50
+    min: int = 50
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -257,7 +257,7 @@ class CmdTTS(ChatCmd):
     command: Literal["!tts"]
     voice: str
     text: Annotated[str, StringConstraints(min_length=1, max_length=250)]
-    cost = 1000
+    cost: int = 1000
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -277,7 +277,7 @@ class CmdSoundboard(ChatCmd):
         "9000", "meow", "wawa", "xeno", "spongebob_horn", "ring", "dun_dunnn", 
         "few_moments_later", "noot", "noot_horror",
     ]
-    cost: 500
+    cost: int = 500
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -293,7 +293,7 @@ class CmdSoundboard(ChatCmd):
 @register
 class CmdRMeme(ChatCmd):
     command: Literal["!rmeme"]
-    cost: 1000
+    cost: int = 1000
 
     @classmethod
     def command_literal(cls) -> List[str]:
