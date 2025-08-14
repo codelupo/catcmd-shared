@@ -350,7 +350,9 @@ class ChatMsg(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def parse_cmd(cls, values):
-        if "cmd" not in values or values["cmd"] is None:
+        # we want to be able to process cmd seperately 
+        # therefore if some value for cmd is given, then don't try to process it.
+        if "cmd" not in values:
             values["cmd"] = ChatCmd.from_raw(values)
         return values
 
