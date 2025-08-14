@@ -41,7 +41,7 @@ class ChatCmd(BaseModel):
 
 @register
 class CmdDiscord(ChatCmd):
-    command: Literal["discord"]
+    command: Literal["!discord"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -49,9 +49,7 @@ class CmdDiscord(ChatCmd):
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
-        if len(tail) < 1:
-            raise ValueError("Usage: !soundboard <sound>")
-        return {"sound": tail[0]}
+        return {}
     
 
 @register
@@ -285,7 +283,7 @@ class CmdSoundboard(ChatCmd):
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
-        if len(tail) < 2:
+        if len(tail) < 1:
             raise ValueError("Usage: !soundboard <sound>")
         return {"sound": tail[0]}
     
