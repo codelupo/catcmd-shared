@@ -28,9 +28,9 @@ class ChatCmd(BaseModel):
     def from_raw(cls, raw_dict: Dict) -> "ChatCmd":
         msg = raw_dict['msg']
         parts = shlex.split(msg)
-        if not parts:
-            raise ValueError("Empty command")
         cmd_token, tail = parts[0], parts[1:]
+        if cmd_token[0] != "!":
+            return None
         model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
         if not model:
             raise ValueError(f"Unknown command: {cmd_token}")
@@ -351,13 +351,7 @@ class ChatMsg(BaseModel):
     @classmethod
     def parse_cmd(cls, values):
         if "cmd" not in values or values["cmd"] is None:
-            try:
-                print('start try')
-                values["cmd"] = ChatCmd.from_raw(values)
-                print(f'end try: {values}')
-            except ValueError as e:
-                print(f'excetion: {e}')
-                pass  # Not a command or invalid → leave cmd=None
+            values["cmd"] = ChatCmd.from_raw(values)
         return values
 
 
