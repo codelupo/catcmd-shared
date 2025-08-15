@@ -328,11 +328,29 @@ class CmdL(ChatCmd):
         return {}
 
 
+@register
+class CmdLinkTo(ChatCmd):
+    command: Literal["linkto"]
+    platform: Literal["twitch", "youtube", "discord"]
+    username: str
+
+    @classmethod
+    def command_literal(cls) -> List[str]:
+        return ["linkto"]
+
+    @classmethod
+    def parse_args(cls, tail: list[str]) -> dict:
+        if len(tail) < 2:
+            raise ValueError("Usage: !linkto <platform> <username>")
+        return {}
+
+
 CmdUnion = Annotated[
     Union[
         CmdDiscord, CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred,
         CmdCancelPred, CmdVote, CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdTTS, CmdRMeme, CmdSoundboard, 
         CmdW, CmdL, 
+        CmdLinkTo, 
     ],
     Field(discriminator="command"),
 ]
