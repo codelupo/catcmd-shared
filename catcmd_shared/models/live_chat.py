@@ -363,7 +363,7 @@ CmdUnion = Annotated[
         CmdDiscord, CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred,
         CmdCancelPred, CmdVote, CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdTTS, CmdRMeme, CmdSoundboard, 
         CmdW, CmdL, 
-        CmdLinkAcc, 
+        CmdLinkDiscord, CmdLinkAcc, 
     ],
     Field(discriminator="command"),
 ]
