@@ -329,12 +329,12 @@ class CmdL(ChatCmd):
 
 @register
 class CmdLinkDiscord(ChatCmd):
-    command: Literal["linkdiscord"]
+    command: Literal["!linkdiscord"]
     username: str
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["linkdiscord"]
+        return ["!linkdiscord"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -344,12 +344,12 @@ class CmdLinkDiscord(ChatCmd):
     
 @register
 class CmdLinkAcc(ChatCmd):
-    command: Literal["linkacc"]
+    command: Literal["!linkacc"]
     code: str
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["linkacc"]
+        return ["!linkacc"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
