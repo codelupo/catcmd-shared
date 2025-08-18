@@ -35,7 +35,6 @@ class ChatCmd(BaseModel):
         if not model:
             raise ValueError(f"Unknown command: {cmd_token}")
         data = {"command": cmd_token, **model.parse_args(tail)}
-        print(data)
         return model.model_validate(data)
 
 
@@ -331,6 +330,7 @@ class CmdL(ChatCmd):
 class CmdLinkDiscord(ChatCmd):
     command: Literal["!linkdiscord"]
     username: str
+    allowed_platforms = ["youtube", "twitch"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -346,6 +346,7 @@ class CmdLinkDiscord(ChatCmd):
 class CmdLinkAcc(ChatCmd):
     command: Literal["!linkacc"]
     code: str
+    allowed_platforms = ["discord"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -385,6 +386,8 @@ class ChatMsg(BaseModel):
         # therefore if some value for cmd is given, then don't try to process it.
         if "cmd" not in values:
             values["cmd"] = ChatCmd.from_raw(values)
+        if values["cmd"] and values["cmd"].allowed_platforms and values["platform"] not in values["cmd"].allowed_platforms:
+            raise ValueError(f"This command cannot be used on this platform") 
         return values
 
 
