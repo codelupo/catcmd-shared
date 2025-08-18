@@ -340,7 +340,7 @@ class CmdLinkDiscord(ChatCmd):
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
             raise ValueError("Usage: !linkdiscord <username>")
-        return {}
+        return {"username": tail[0]}
     
 @register
 class CmdLinkAcc(ChatCmd):
@@ -355,7 +355,7 @@ class CmdLinkAcc(ChatCmd):
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
             raise ValueError("Usage: !linkacc <username>")
-        return {}
+        return {"code": tail[0]}
 
 
 CmdUnion = Annotated[
