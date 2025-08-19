@@ -252,8 +252,8 @@ class CmdRoulette(ChatCmd):
 @register
 class CmdTTS(ChatCmd):
     command: Literal["!tts"]
-    voice: str
-    text: Annotated[str, StringConstraints(min_length=1, max_length=250)]
+    voice: str = "default"
+    text: Annotated[str, StringConstraints(min_length=5, max_length=250)]
     cost: int = 1000
 
     @classmethod
@@ -262,9 +262,12 @@ class CmdTTS(ChatCmd):
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
-        if len(tail) < 2:
+        if len(tail) == 1:
+            return {"text": tail[1]}
+        elif len(tail) == 2:
+            return {"voice": tail[0], "text": tail[1]}
+        else:
             raise ValueError("Usage: !tts <voice_name> <text>")
-        return {"voice": tail[0], "text": tail[1]}
 
 
 @register
@@ -330,7 +333,6 @@ class CmdL(ChatCmd):
 class CmdLinkDiscord(ChatCmd):
     command: Literal["!linkdiscord"]
     username: str
-    allowed_platforms = ["youtube", "twitch"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -346,7 +348,6 @@ class CmdLinkDiscord(ChatCmd):
 class CmdLinkAcc(ChatCmd):
     command: Literal["!linkacc"]
     code: str
-    allowed_platforms = ["discord"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -386,8 +387,6 @@ class ChatMsg(BaseModel):
         # therefore if some value for cmd is given, then don't try to process it.
         if "cmd" not in values:
             values["cmd"] = ChatCmd.from_raw(values)
-        if values["cmd"] and values["cmd"].allowed_platforms and values["platform"] not in values["cmd"].allowed_platforms:
-            raise ValueError(f"This command cannot be used on this platform") 
         return values
 
 
