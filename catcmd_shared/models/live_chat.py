@@ -5,6 +5,8 @@ from typing import Type, Dict, Optional, List
 import shlex
 import re
 
+from catcmd_shared.models.user import ViewerLevel
+
 _REGISTRY: Dict[str, Type["ChatCmd"]] = {}
 
 def register(cls: Type["ChatCmd"]) -> Type["ChatCmd"]:
@@ -15,6 +17,7 @@ def register(cls: Type["ChatCmd"]) -> Type["ChatCmd"]:
 
 class ChatCmd(BaseModel):
     cost: int = 0
+    min_level: ViewerLevel = ViewerLevel.viewer
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -71,6 +74,7 @@ class CmdNewPoll(ChatCmd):
     desc: Annotated[str, StringConstraints(min_length=1, max_length=40)]
     options: List[str]
     close_date: datetime
+    min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -88,6 +92,7 @@ class CmdNewPred(ChatCmd):
     desc: Annotated[str, StringConstraints(min_length=1, max_length=40)]
     options: List[str]
     close_date: datetime
+    min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -102,6 +107,7 @@ class CmdNewPred(ChatCmd):
 class CmdEndPoll(ChatCmd):
     command: Literal["!endpoll"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
+    min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -117,6 +123,7 @@ class CmdEndPred(ChatCmd):
     command: Literal["!endpred"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
     won_option: int
+    min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -133,6 +140,7 @@ class CmdEndPred(ChatCmd):
 class CmdCancelPred(ChatCmd):
     command: Literal["!cancelpred"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
+    min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -379,6 +387,7 @@ class ChatMsg(BaseModel):
     msg: str
     timestamp:datetime
     cmd: Optional[CmdUnion] = None
+    viewer_level: ViewerLevel 
 
     @model_validator(mode="before")
     @classmethod
@@ -387,6 +396,9 @@ class ChatMsg(BaseModel):
         # therefore if some value for cmd is given, then don't try to process it.
         if "cmd" not in values:
             values["cmd"] = ChatCmd.from_raw(values)
+        if values["viewer_level"] < values["cmd"].min_level:
+            raise ValueError(f"User doesn't have access to perform the cmd")
+            
         return values
 
 
