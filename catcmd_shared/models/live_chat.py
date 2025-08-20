@@ -257,8 +257,8 @@ class CmdRoulette(ChatCmd):
             return {"amount": tail[0]}
         elif tail[0].isdigit == False:
             raise ValueError("Allowed amount is a number or \"all\"")
-        amount = int(tail[0])
-        if amount[0] < cls.min:
+        amount = tail[0]
+        if int(amount) < cls.min:
             raise ValueError(f"Min {cls.min} biscuits")
 
 
