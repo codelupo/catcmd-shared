@@ -401,6 +401,7 @@ class ChatMsg(BaseModel):
         if not values["cmd"]:
             return values
         
+        print(f"type: {type(values["cmd"])}, {values["cmd"]}")
         if not values["viewer_level"] or values["viewer_level"] > values["cmd"].min_level:
             raise ValueError(f"User doesn't have access to perform the cmd")
             
