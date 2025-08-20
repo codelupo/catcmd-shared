@@ -363,17 +363,17 @@ class CmdLinkDiscord(ChatCmd):
     
 @register
 class CmdLinkPlatform(ChatCmd):
-    command: Literal["linkplatfomr"]
+    command: Literal["linkplatform"]
     code: str
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["linkplatfomr"]
+        return ["linkplatform"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
-            raise ValueError("Usage: !linkplatfomr <code>")
+            raise ValueError("Usage: !linkplatform <code>")
         return {"code": tail[0]}
 
 
