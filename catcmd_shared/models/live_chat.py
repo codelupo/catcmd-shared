@@ -362,27 +362,46 @@ class CmdLinkDiscord(ChatCmd):
         return {"username": tail[0]}
     
 @register
-class CmdLinkAcc(ChatCmd):
-    command: Literal["linkacc"]
+class CmdLinkPlatform(ChatCmd):
+    command: Literal["linkplatfomr"]
     code: str
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["linkacc"]
+        return ["linkplatfomr"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
-            raise ValueError("Usage: !linkacc <username>")
+            raise ValueError("Usage: !linkplatfomr <code>")
         return {"code": tail[0]}
 
+
+@register
+class CmdUsePlatform(ChatCmd):
+    command: Literal["useplatform"]
+    platform: Literal["youtube", "twitch"]
+
+    @classmethod
+    def command_literal(cls) -> List[str]:
+        return ["useplatform"]
+
+    @classmethod
+    def parse_args(cls, tail: list[str]) -> dict:
+        if len(tail) < 1:
+            raise ValueError("Usage: !useplatform <platform>")
+        return {"platform": tail[0]}
+
+
+# @register
+# class CmdProfile(ChatCmd):
 
 CmdUnion = Annotated[
     Union[
         CmdDiscord, CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred,
         CmdCancelPred, CmdVote, CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdTTS, CmdRMeme, CmdSoundboard, 
         CmdW, CmdL, 
-        CmdLinkDiscord, CmdLinkAcc, 
+        CmdLinkDiscord, CmdLinkPlatform, CmdUsePlatform,
     ],
     Field(discriminator="command"),
 ]
