@@ -211,11 +211,11 @@ class CmdPyTest(ChatCmd):
 
 @register
 class CmdPoints(ChatCmd):
-    command: Literal["points", "!biscuits"]
+    command: Literal["points", "biscuits"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["points", "!biscuits"]
+        return ["points", "biscuits"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -237,13 +237,13 @@ class CmdStats(ChatCmd):
 
 @register
 class CmdRoulette(ChatCmd):
-    command: Literal["roulette", "!gamble"]
+    command: Literal["roulette", "gamble"]
     amount: str
     min: int = 50
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["roulette", "!gamble"]
+        return ["roulette", "gamble"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -282,7 +282,7 @@ class CmdTTS(ChatCmd):
 
 @register
 class CmdSoundboard(ChatCmd):
-    command: Literal["soundboard", "!sb"]
+    command: Literal["soundboard", "sb"]
     sound: Literal[
         "9000", "meow", "wawa", "xeno", "spongebob_horn", "ring", "dun_dunnn", 
         "few_moments_later", "noot", "noot_horror",
@@ -291,7 +291,7 @@ class CmdSoundboard(ChatCmd):
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["soundboard", "!sb"]
+        return ["soundboard", "sb"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
