@@ -398,16 +398,15 @@ class ChatMsg(BaseModel):
         # therefore if some value for cmd is given, then don't try to process it.
         if "cmd" not in values:
             values["cmd"] = ChatCmd.from_raw(values)
-        if not values["cmd"]:
-            return values
-        
-        print(f"type: {type(values["cmd"])}, {values["cmd"]}")
-        if not values["viewer_level"] or values["viewer_level"] > values["cmd"].min_level:
-            raise ValueError(f"User doesn't have access to perform the cmd")
-            
         return values
-
-
+    
+    @model_validator(mode="after")
+    def check_permissions(self):
+        if self.cmd and (self.viewer_level > self.cmd.min_level):
+            raise ValueError(f"User doesn't have access to perform the cmd")
+        return self
+    
+    
 class LiveChatMsg(BaseModel):
     msg_id: str
     platform: Literal["twitch", "youtube", "discord"]
