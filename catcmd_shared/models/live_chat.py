@@ -396,7 +396,10 @@ class ChatMsg(BaseModel):
         # therefore if some value for cmd is given, then don't try to process it.
         if "cmd" not in values:
             values["cmd"] = ChatCmd.from_raw(values)
-        if values["viewer_level"] < values["cmd"].min_level:
+        if not values["cmd"]:
+            return values
+        
+        if not values["viewer_level"] or values["viewer_level"] > values["cmd"].min_level:
             raise ValueError(f"User doesn't have access to perform the cmd")
             
         return values
