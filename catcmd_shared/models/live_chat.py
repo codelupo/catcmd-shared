@@ -18,6 +18,8 @@ def register(cls: Type["ChatCmd"]) -> Type["ChatCmd"]:
 class ChatCmd(BaseModel):
     cost: int = 0
     min_level: ViewerLevel = ViewerLevel.viewer
+    cd_viewer: int = 0
+    cd_global: int = 0
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -240,6 +242,7 @@ class CmdRoulette(ChatCmd):
     command: Literal["roulette", "gamble"]
     amount: str
     min: int = 50
+    cd_viewer: int = 15
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -265,6 +268,7 @@ class CmdTTS(ChatCmd):
     voice: str = "default"
     text: Annotated[str, StringConstraints(min_length=5, max_length=250)]
     cost: int = 1000
+    cs_global: int = 30
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -288,6 +292,7 @@ class CmdSoundboard(ChatCmd):
         "few_moments_later", "noot", "noot_horror",
     ]
     cost: int = 500
+    cd_global: int = 15
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -304,6 +309,7 @@ class CmdSoundboard(ChatCmd):
 class CmdRMeme(ChatCmd):
     command: Literal["rmeme"]
     cost: int = 1000
+    cd_global: int = 30
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -343,6 +349,7 @@ class CmdL(ChatCmd):
 class CmdLinkDiscord(ChatCmd):
     command: Literal["linkdiscord"]
     username: str
+    cd_viewer: int = 30
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -406,7 +413,7 @@ class ChatMsg(BaseModel):
             raise ValueError(f"User doesn't have access to perform the cmd")
         return self
     
-    
+
 class LiveChatMsg(BaseModel):
     msg_id: str
     platform: Literal["twitch", "youtube", "discord"]
