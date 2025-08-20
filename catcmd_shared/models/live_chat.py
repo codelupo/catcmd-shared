@@ -34,6 +34,8 @@ class ChatCmd(BaseModel):
         cmd_token, tail = parts[0], parts[1:]
         if cmd_token[0] != "!":
             return None
+        cmd_token = cmd_token[1:]
+
         model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
         if not model:
             raise ValueError(f"Unknown command: {cmd_token}")
@@ -43,11 +45,11 @@ class ChatCmd(BaseModel):
 
 @register
 class CmdDiscord(ChatCmd):
-    command: Literal["!discord"]
+    command: Literal["discord"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!discord"]
+        return ["discord"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -56,11 +58,11 @@ class CmdDiscord(ChatCmd):
 
 @register
 class CmdShowPolls(ChatCmd):
-    command: Literal["!showpolls"]
+    command: Literal["showpolls"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!showpolls"]
+        return ["showpolls"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -69,7 +71,7 @@ class CmdShowPolls(ChatCmd):
 
 @register
 class CmdNewPoll(ChatCmd):
-    command: Literal["!newpoll"]
+    command: Literal["newpoll"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
     desc: Annotated[str, StringConstraints(min_length=1, max_length=40)]
     options: List[str]
@@ -78,7 +80,7 @@ class CmdNewPoll(ChatCmd):
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!newpoll"]
+        return ["newpoll"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -87,7 +89,7 @@ class CmdNewPoll(ChatCmd):
 
 @register
 class CmdNewPred(ChatCmd):
-    command: Literal["!newpred"]
+    command: Literal["newpred"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
     desc: Annotated[str, StringConstraints(min_length=1, max_length=40)]
     options: List[str]
@@ -96,7 +98,7 @@ class CmdNewPred(ChatCmd):
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!newpred"]
+        return ["newpred"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -105,13 +107,13 @@ class CmdNewPred(ChatCmd):
 
 @register
 class CmdEndPoll(ChatCmd):
-    command: Literal["!endpoll"]
+    command: Literal["endpoll"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
     min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!endpoll"]
+        return ["endpoll"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -120,14 +122,14 @@ class CmdEndPoll(ChatCmd):
 
 @register
 class CmdEndPred(ChatCmd):
-    command: Literal["!endpred"]
+    command: Literal["endpred"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
     won_option: int
     min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!endpred"]
+        return ["endpred"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -138,13 +140,13 @@ class CmdEndPred(ChatCmd):
 
 @register
 class CmdCancelPred(ChatCmd):
-    command: Literal["!cancelpred"]
+    command: Literal["cancelpred"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
     min_level: ViewerLevel = ViewerLevel.mod
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!cancelpred"]
+        return ["cancelpred"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -156,14 +158,14 @@ class CmdCancelPred(ChatCmd):
 @register
 class CmdVote(ChatCmd):
     # TODO: allow only numbers
-    command: Literal["!vote"]
+    command: Literal["vote"]
     name: Optional[str] = None
     option: Annotated[int, Field(ge=1, le=5)] # 1 <=  x <= 5
     pred_points: Optional[int] = None
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!vote"]
+        return ["vote"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -183,11 +185,11 @@ class CmdVote(ChatCmd):
 
 @register
 class CmdLurk(ChatCmd):
-    command: Literal["!lurk"]
+    command: Literal["lurk"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!lurk"]
+        return ["lurk"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -196,11 +198,11 @@ class CmdLurk(ChatCmd):
 
 @register
 class CmdPyTest(ChatCmd):
-    command: Literal["!pytest"]
+    command: Literal["pytest"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!pytest"]
+        return ["pytest"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -209,11 +211,11 @@ class CmdPyTest(ChatCmd):
 
 @register
 class CmdPoints(ChatCmd):
-    command: Literal["!points", "!biscuits"]
+    command: Literal["points", "!biscuits"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!points", "!biscuits"]
+        return ["points", "!biscuits"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -222,11 +224,11 @@ class CmdPoints(ChatCmd):
 
 @register
 class CmdStats(ChatCmd):
-    command: Literal["!stats"]
+    command: Literal["stats"]
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!stats"]
+        return ["stats"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -235,13 +237,13 @@ class CmdStats(ChatCmd):
 
 @register
 class CmdRoulette(ChatCmd):
-    command: Literal["!roulette", "!gamble"]
+    command: Literal["roulette", "!gamble"]
     amount: str
     min: int = 50
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!roulette", "!gamble"]
+        return ["roulette", "!gamble"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -259,14 +261,14 @@ class CmdRoulette(ChatCmd):
 
 @register
 class CmdTTS(ChatCmd):
-    command: Literal["!tts"]
+    command: Literal["tts"]
     voice: str = "default"
     text: Annotated[str, StringConstraints(min_length=5, max_length=250)]
     cost: int = 1000
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!tts"]
+        return ["tts"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -280,7 +282,7 @@ class CmdTTS(ChatCmd):
 
 @register
 class CmdSoundboard(ChatCmd):
-    command: Literal["!soundboard", "!sb"]
+    command: Literal["soundboard", "!sb"]
     sound: Literal[
         "9000", "meow", "wawa", "xeno", "spongebob_horn", "ring", "dun_dunnn", 
         "few_moments_later", "noot", "noot_horror",
@@ -289,7 +291,7 @@ class CmdSoundboard(ChatCmd):
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!soundboard", "!sb"]
+        return ["soundboard", "!sb"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -300,12 +302,12 @@ class CmdSoundboard(ChatCmd):
 
 @register
 class CmdRMeme(ChatCmd):
-    command: Literal["!rmeme"]
+    command: Literal["rmeme"]
     cost: int = 1000
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!rmeme"]
+        return ["rmeme"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -339,12 +341,12 @@ class CmdL(ChatCmd):
 
 @register
 class CmdLinkDiscord(ChatCmd):
-    command: Literal["!linkdiscord"]
+    command: Literal["linkdiscord"]
     username: str
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!linkdiscord"]
+        return ["linkdiscord"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
@@ -354,12 +356,12 @@ class CmdLinkDiscord(ChatCmd):
     
 @register
 class CmdLinkAcc(ChatCmd):
-    command: Literal["!linkacc"]
+    command: Literal["linkacc"]
     code: str
 
     @classmethod
     def command_literal(cls) -> List[str]:
-        return ["!linkacc"]
+        return ["linkacc"]
 
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
