@@ -393,6 +393,22 @@ class CmdUsePlatform(ChatCmd):
         return {"platform": tail[0]}
 
 
+@register
+class CmdSetLive(ChatCmd):
+    command: Literal["setlive"]
+    switch: Literal["on", "off"]
+
+    @classmethod
+    def command_literal(cls) -> List[str]:
+        return ["setlive"]
+
+    @classmethod
+    def parse_args(cls, tail: list[str]) -> dict:
+        if len(tail) < 1:
+            raise ValueError("Usage: !setlive <switch>")
+        return {"platform": tail[0]}
+
+
 # @register
 # class CmdProfile(ChatCmd):
 
