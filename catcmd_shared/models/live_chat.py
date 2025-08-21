@@ -56,7 +56,7 @@ class CmdDiscord(ChatCmd):
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
         return {}
-    
+
 
 @register
 class CmdShowPolls(ChatCmd):
@@ -443,18 +443,18 @@ class LiveChatMsg(BaseModel):
     
 
 def validate_poll(tail):
-    cmd_usage = "Usage: !tts name \"desc\" \"opt 1\" ... \"opt 5\" xhr"
+    cmd_usage = "Usage: !tts name \"desc\" xhr \"opt 1\" ... \"opt 5\""
     if len(tail) < 4:
         raise ValueError(cmd_usage)
     
     # remaining tail, excluding name, desc, duration
-    options = tail[2:-1]
+    options = tail[3:]
     for option in options:
         if len(option) > 40:
             raise ValueError("Poll option should be less than 40char.")
 
     # validate poll duration
-    regex_res = re.fullmatch(r"(\d+)(day|hr|min)", tail[-1])
+    regex_res = re.fullmatch(r"(\d+)(day|hr|min)", tail[2])
     if not regex_res:
         raise ValueError("Invalid duration format, e.g. 5hr, 5min, 5day")
     

@@ -22,9 +22,9 @@ msg['timestamp'] = datetime.now()
 
 
 msg['msg'] =  '!soundboard xeno'
-msg['msg'] = '!tts test "abc"'
+msg['msg'] = '!tts test "abcasdasdad"'
 
-live_chat.ChatMsg(**msg)
+msg = live_chat.ChatMsg(**msg)
 live_chat.ChatMsg.model_validate(msg)
 live_chat.ChatCmd.from_raw(msg)
 
