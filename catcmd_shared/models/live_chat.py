@@ -406,7 +406,7 @@ class CmdSetLive(ChatCmd):
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
             raise ValueError("Usage: !setlive <switch>")
-        return {"platform": tail[0]}
+        return {"switch": tail[0]}
 
 
 # @register
