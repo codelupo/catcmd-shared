@@ -257,10 +257,9 @@ class CmdRoulette(ChatCmd):
             return {"amount": val}
         elif val.isdigit == False:
             raise ValueError("Allowed amount is a number or \"all\"")
-        amount = val
-        if int(amount) < cls.min:
+        if int(val) < cls.min:
             raise ValueError(f"Min {cls.min} biscuits")
-
+        return {"amount": val}
 
 @register
 class CmdTTS(ChatCmd):
