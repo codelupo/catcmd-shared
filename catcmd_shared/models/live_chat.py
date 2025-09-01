@@ -252,12 +252,12 @@ class CmdRoulette(ChatCmd):
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
             raise ValueError("Usage: !roulette <amount>")
-        
-        if tail[0] == "all":
-            return {"amount": tail[0]}
-        elif tail[0].isdigit == False:
+        val = str(tail[0])
+        if val== "all":
+            return {"amount": val}
+        elif val.isdigit == False:
             raise ValueError("Allowed amount is a number or \"all\"")
-        amount = tail[0]
+        amount = val
         if int(amount) < cls.min:
             raise ValueError(f"Min {cls.min} biscuits")
 
