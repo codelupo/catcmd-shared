@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, model_validator, StringConstraints
 from typing import Optional, Literal, Annotated, Union
 from datetime import datetime, timedelta, timezone
-from typing import Type, Dict, Optional, List
+from typing import Type, Dict, Optional, List, ClassVar
 import shlex
 import re
 
@@ -18,8 +18,8 @@ def register(cls: Type["ChatCmd"]) -> Type["ChatCmd"]:
 class ChatCmd(BaseModel):
     cost: int = 0
     min_level: ViewerLevel = ViewerLevel.viewer
-    cd_viewer: int = 0
-    cd_global: int = 0
+    cd_viewer: ClassVar[int] = 0
+    cd_global: ClassVar[int] = 0
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -241,8 +241,8 @@ class CmdStats(ChatCmd):
 class CmdRoulette(ChatCmd):
     command: Literal["roulette", "gamble"]
     amount: str
-    min: int = 50
-    cd_viewer: int = 15
+    min: ClassVar[int]  = 50
+    cd_viewer: ClassVar[int]  = 15
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -257,7 +257,8 @@ class CmdRoulette(ChatCmd):
             return {"amount": val}
         elif val.isdigit == False:
             raise ValueError("Allowed amount is a number or \"all\"")
-        if int(val) < cls.min:
+        amount = val
+        if int(amount) < cls.min:
             raise ValueError(f"Min {cls.min} biscuits")
         return {"amount": val}
 
@@ -266,8 +267,8 @@ class CmdTTS(ChatCmd):
     command: Literal["tts"]
     voice: str = "default"
     text: Annotated[str, StringConstraints(min_length=5, max_length=250)]
-    cost: int = 200
-    cs_global: int = 30
+    cost: ClassVar[int] = 200
+    cs_global: ClassVar[int] = 30
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -290,8 +291,8 @@ class CmdSoundboard(ChatCmd):
         "9000", "meow", "wawa", "xeno", "spongebob_horn", "ring", "dun_dunnn", 
         "few_moments_later", "noot", "noot_horror",
     ]
-    cost: int = 100
-    cd_global: int = 15
+    cost: ClassVar[int] = 100
+    cd_global: ClassVar[int] = 15
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -307,8 +308,8 @@ class CmdSoundboard(ChatCmd):
 @register
 class CmdRMeme(ChatCmd):
     command: Literal["rmeme"]
-    cost: int = 200
-    cd_global: int = 30
+    cost: ClassVar[int] = 200
+    cd_global: ClassVar[int] = 30
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -348,7 +349,7 @@ class CmdL(ChatCmd):
 class CmdLinkDiscord(ChatCmd):
     command: Literal["linkdiscord"]
     username: str
-    cd_viewer: int = 30
+    cd_viewer: ClassVar[int] = 30
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -419,8 +420,9 @@ class CmdSetLive(ChatCmd):
 
 CmdUnion = Annotated[
     Union[
-        CmdDiscord, CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred,
-        CmdCancelPred, CmdVote, CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdTTS, CmdRMeme, CmdSoundboard, 
+        CmdDiscord, 
+        CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred, CmdCancelPred, CmdVote, 
+        CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdRoulette, CmdTTS, CmdRMeme, CmdSoundboard, 
         CmdW, CmdL, 
         CmdLinkDiscord, CmdLinkPlatform, CmdUsePlatform,
         CmdSetLive,

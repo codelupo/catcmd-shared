@@ -21,6 +21,7 @@ msg = {"id_msg": "aa", "id_platform": "bb", "platform": "twitch", "username": "a
 msg['timestamp'] = datetime.now()
 
 
+msg['msg'] =  '!roulette 1000'
 msg['msg'] =  '!soundboard xeno'
 msg['msg'] = '!tts test "abcasdasdad"'
 
