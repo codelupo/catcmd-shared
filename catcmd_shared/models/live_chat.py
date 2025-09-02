@@ -36,7 +36,7 @@ class ChatCmd(BaseModel):
         cmd_token, tail = parts[0], parts[1:]
         if cmd_token[0] != "!":
             return None
-        cmd_token = cmd_token[1:]
+        cmd_token = cmd_token[1:].lower()
 
         model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
         if not model:
@@ -252,8 +252,8 @@ class CmdRoulette(ChatCmd):
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
             raise ValueError("Usage: !roulette <amount>")
-        val = str(tail[0])
-        if val== "all":
+        val = str(tail[0]).lower()
+        if val == "all":
             return {"amount": val}
         elif val.isdigit == False:
             raise ValueError("Allowed amount is a number or \"all\"")
@@ -279,7 +279,7 @@ class CmdTTS(ChatCmd):
         if len(tail) == 1:
             return {"text": tail[1]}
         elif len(tail) == 2:
-            return {"voice": tail[0], "text": tail[1]}
+            return {"voice": tail[0].lower(), "text": tail[1]}
         else:
             raise ValueError("Usage: !tts <voice_name> <text>")
 
@@ -302,7 +302,7 @@ class CmdSoundboard(ChatCmd):
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) < 1:
             raise ValueError("Usage: !soundboard <sound>")
-        return {"sound": tail[0]}
+        return {"sound": tail[0].lower()}
     
 
 @register
