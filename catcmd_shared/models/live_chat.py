@@ -268,7 +268,7 @@ class CmdTTS(ChatCmd):
     command: Literal["tts"]
     voice: str = "default"
     text: Annotated[str, StringConstraints(min_length=5, max_length=250)]
-    cost: ClassVar[int] = 200
+    cost: ClassVar[int] = 100
     cs_global: ClassVar[int] = 30
 
     @classmethod
@@ -292,7 +292,7 @@ class CmdSoundboard(ChatCmd):
         "9000", "meow", "wawa", "xeno", "spongebob_horn", "ring", "dun_dunnn", 
         "few_moments_later", "noot", "noot_horror",
     ]
-    cost: ClassVar[int] = 100
+    cost: ClassVar[int] = 50
     cd_global: ClassVar[int] = 15
 
     @classmethod
@@ -309,7 +309,7 @@ class CmdSoundboard(ChatCmd):
 @register
 class CmdRMeme(ChatCmd):
     command: Literal["rmeme"]
-    cost: ClassVar[int] = 200
+    cost: ClassVar[int] = 100
     cd_global: ClassVar[int] = 30
 
     @classmethod
