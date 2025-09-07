@@ -278,7 +278,7 @@ class CmdTTS(ChatCmd):
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
         if len(tail) == 1:
-            return {"text": tail[1]}
+            return {"text": tail[0]}
         elif len(tail) == 2:
             return {"voice": tail[0].lower(), "text": tail[1]}
         else:
