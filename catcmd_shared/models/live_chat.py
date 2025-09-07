@@ -32,10 +32,11 @@ class ChatCmd(BaseModel):
     @classmethod
     def from_raw(cls, raw_dict: Dict) -> "ChatCmd":
         msg = raw_dict['msg']
+        if msg[0] != "!":
+            return None
+        
         parts = shlex.split(msg)
         cmd_token, tail = parts[0], parts[1:]
-        if cmd_token[0] != "!":
-            return None
         cmd_token = cmd_token[1:].lower()
 
         model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
