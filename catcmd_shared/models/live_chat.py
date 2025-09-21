@@ -441,7 +441,7 @@ class ChatMsg(BaseModel):
     timestamp:datetime
     cmd: Optional[CmdUnion] = None
     viewer_level: ViewerLevel 
-    viewer_colour: str
+    viewer_colour: str = "#ffffff"
 
     @model_validator(mode="before")
     @classmethod
