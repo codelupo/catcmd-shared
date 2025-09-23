@@ -242,7 +242,7 @@ class CmdStats(ChatCmd):
 class CmdRoulette(ChatCmd):
     command: Literal["roulette", "gamble"]
     amount: str
-    min: ClassVar[int]  = 50
+    min: ClassVar[int]  = 10
     cd_viewer: ClassVar[int]  = 15
 
     @classmethod
