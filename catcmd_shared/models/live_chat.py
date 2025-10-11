@@ -32,19 +32,25 @@ class ChatCmd(BaseModel):
     @classmethod
     def from_raw(cls, raw_dict: Dict) -> "ChatCmd":
         msg = raw_dict['msg']
-        if msg[0] != "!":
-            return None
+        if msg[0] == "!":
+            parts = shlex.split(msg)
+            cmd_token, tail = parts[0], parts[1:]
+            cmd_token = cmd_token[1:].lower()
+
+            model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
+            if not model:
+                raise ValueError(f"Unknown command: {cmd_token}")
+            data = {"command": cmd_token, **model.parse_args(tail)}
+            return model.model_validate(data)
+        elif msg.lower() in ["w", "l"]:
+            cmd_token = msg.lower()
+            model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
+            if not model:
+                raise ValueError(f"Unknown command: {cmd_token}")
+            data = {"command": cmd_token, **model.parse_args(tail)}
+            return model.model_validate(data)
         
-        parts = shlex.split(msg)
-        cmd_token, tail = parts[0], parts[1:]
-        cmd_token = cmd_token[1:].lower()
-
-        model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
-        if not model:
-            raise ValueError(f"Unknown command: {cmd_token}")
-        data = {"command": cmd_token, **model.parse_args(tail)}
-        return model.model_validate(data)
-
+        return None
 
 @register
 class CmdDiscord(ChatCmd):
@@ -57,6 +63,36 @@ class CmdDiscord(ChatCmd):
     @classmethod
     def parse_args(cls, tail: list[str]) -> dict:
         return {}
+    
+
+@register
+class CmdHelp(ChatCmd):
+    command: Literal["help"]
+
+    @classmethod
+    def command_literal(cls) -> List[str]:
+        return ["help"]
+
+    @classmethod
+    def parse_args(cls, tail: list[str]) -> dict:
+        return {}
+
+
+@register
+class CmdShoutOut(ChatCmd):
+    command: Literal["shoutout", "so"]
+    name: str
+    min_level: ViewerLevel = ViewerLevel.mod
+
+    @classmethod
+    def command_literal(cls) -> List[str]:
+        return ["shoutout", "so"]
+    
+    @classmethod
+    def parse_args(cls, tail: list[str]) -> dict:
+        if len(tail) < 1:
+            raise ValueError("Usage: !so <name>")
+        return {"name": tail[0]}
 
 
 @register
@@ -421,7 +457,7 @@ class CmdSetLive(ChatCmd):
 
 CmdUnion = Annotated[
     Union[
-        CmdDiscord, 
+        CmdDiscord, CmdHelp, CmdShoutOut,
         CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred, CmdCancelPred, CmdVote, 
         CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdRoulette, CmdTTS, CmdRMeme, CmdSoundboard, 
         CmdW, CmdL, 
