@@ -47,7 +47,7 @@ class ChatCmd(BaseModel):
             model: Optional[Type[ChatCmd]] = _REGISTRY.get(cmd_token)
             if not model:
                 raise ValueError(f"Unknown command: {cmd_token}")
-            data = {"command": cmd_token, **model.parse_args(tail)}
+            data = {"command": cmd_token, **model.parse_args(msg.lower())}
             return model.model_validate(data)
         
         return None
