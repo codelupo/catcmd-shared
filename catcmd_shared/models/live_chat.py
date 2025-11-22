@@ -109,6 +109,23 @@ class CmdShowPolls(ChatCmd):
 
 
 @register
+class CmdShowPoll(ChatCmd):
+    command: Literal["showpoll"]
+    poll_name: Optional[str]
+
+    @classmethod
+    def command_literal(cls) -> List[str]:
+        return ["showpoll"]
+
+    @classmethod
+    def parse_args(cls, tail: list[str]) -> dict:
+        if len(tail) == 1:
+            return {"poll_name": tail[0]}
+        
+        return {}
+        
+
+@register
 class CmdNewPoll(ChatCmd):
     command: Literal["newpoll"]
     name: Annotated[str, StringConstraints(min_length=1, max_length=8)]
@@ -458,7 +475,7 @@ class CmdSetLive(ChatCmd):
 CmdUnion = Annotated[
     Union[
         CmdDiscord, CmdHelp, CmdShoutOut,
-        CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred, CmdCancelPred, CmdVote, 
+        CmdShowPoll, CmdShowPolls, CmdNewPoll, CmdNewPred, CmdEndPoll, CmdEndPred, CmdCancelPred, CmdVote, 
         CmdLurk, CmdPyTest, CmdPoints, CmdStats, CmdRoulette, CmdTTS, CmdRMeme, CmdSoundboard, 
         CmdW, CmdL, 
         CmdLinkDiscord, CmdLinkPlatform, CmdUsePlatform,
