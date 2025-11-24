@@ -12,6 +12,7 @@ source venv/bin/activate
 
 
 # test
+```
 from catcmd_shared.models import live_chat
 from catcmd_shared.models.user import ViewerLevel
 from datetime import datetime
@@ -28,7 +29,7 @@ msg['msg'] = '!tts test "abcasdasdad"'
 msg = live_chat.ChatMsg(**msg)
 live_chat.ChatMsg.model_validate(msg)
 live_chat.ChatCmd.from_raw(msg)
-
+```
 
 
 # TODO 

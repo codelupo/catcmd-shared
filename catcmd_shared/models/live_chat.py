@@ -41,6 +41,7 @@ class ChatCmd(BaseModel):
             if not model:
                 raise ValueError(f"Unknown command: {cmd_token}")
             data = {"command": cmd_token, **model.parse_args(tail)}
+            
             return model.model_validate(data)
         elif msg.lower() in ["w", "l"]:
             cmd_token = msg.lower()
@@ -213,7 +214,7 @@ class CmdCancelPred(ChatCmd):
 
 @register
 class CmdVote(ChatCmd):
-    # TODO: allow only numbers
+    # TODO: allow only numbers e.g. "1" instead of "!vote 1"
     command: Literal["vote"]
     name: Optional[str] = None
     option: Annotated[int, Field(ge=1, le=5)] # 1 <=  x <= 5
@@ -232,9 +233,9 @@ class CmdVote(ChatCmd):
             return {"name": tail[0], "option": tail[1], "pred_points": tail[2],}
         elif len(tail) == 2:
             if tail[0].isdigit():
-                return {"option": tail[0], "pred_points": tail[2]}
+                return {"option": tail[0], "pred_points": tail[1]}
             else:
-                return {"name": tail[0], "option": tail[0]}
+                return {"name": tail[0], "option": tail[1]}
         elif len(tail) == 1: 
             return {"option": tail[0]}
         
