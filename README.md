@@ -25,6 +25,8 @@ msg['timestamp'] = datetime.now()
 msg['msg'] =  '!roulette 1000'
 msg['msg'] =  '!soundboard xeno'
 msg['msg'] = '!tts test "abcasdasdad"'
+msg['msg'] = '!vote abc 1 all'
+msg['msg'] = '!vote abc 1 2333'
 
 msg = live_chat.ChatMsg(**msg)
 live_chat.ChatMsg.model_validate(msg)

@@ -218,7 +218,7 @@ class CmdVote(ChatCmd):
     command: Literal["vote"]
     name: Optional[str] = None
     option: Annotated[int, Field(ge=1, le=5)] # 1 <=  x <= 5
-    pred_points: Optional[int] = None
+    pred_points: Optional[int | Literal["all"]] = None
 
     @classmethod
     def command_literal(cls) -> List[str]:
@@ -238,7 +238,44 @@ class CmdVote(ChatCmd):
                 return {"name": tail[0], "option": tail[1]}
         elif len(tail) == 1: 
             return {"option": tail[0]}
+
+
+
+# @register
+# class CmdVote(ChatCmd):
+#     # TODO: allow only numbers e.g. "1" instead of "!vote 1"
+#     command: Literal["vote"]
+#     name: Optional[str] = None
+#     option: Annotated[int, Field(ge=1, le=5)] # 1 <=  x <= 5
+#     pred_points: Optional[str] = None
+
+#     @classmethod
+#     def command_literal(cls) -> List[str]:
+#         return ["vote"]
+
+#     @classmethod
+#     def parse_args(cls, tail: list[str]) -> dict:
+#         if len(tail) < 1:
+#             raise ValueError("Usage: !vote (<name>) <option> (<points>)")
         
+#         tail = [item.lower() for item in tail]
+#         return_obj = {}
+#         if len(tail) == 3:
+#             return_obj = {"name": tail[0], "option": tail[1], "pred_points": tail[2]}
+#         elif len(tail) == 2:
+#             if tail[0].isdigit():
+#                 return_obj = {"option": tail[0], "pred_points": tail[1]}
+#             else:
+#                 return_obj = {"name": tail[0], "option": tail[1]}
+#         elif len(tail) == 1: 
+#             return_obj = {"option": tail[0]}
+        
+#         if "pred_points" in return_obj:
+#             if not (return_obj["pred_points"] == "all" or return_obj["pred_points"].isdigit()):
+#                 raise ValueError("Usage: !vote (<name>) <option> (<points>)")
+            
+#         return return_obj
+
 
 @register
 class CmdLurk(ChatCmd):
@@ -310,7 +347,7 @@ class CmdRoulette(ChatCmd):
         val = str(tail[0]).lower()
         if val == "all":
             return {"amount": val}
-        elif val.isdigit == False:
+        elif val.isdigit() == False:
             raise ValueError("Allowed amount is a number or \"all\"")
         amount = val
         if int(amount) < cls.min:
@@ -549,5 +586,5 @@ def validate_poll(tail):
     close_date = datetime.now(timezone.utc) + timedelta_poll_dur
 
     return {
-        "name": tail[0], "desc": tail[1], "options": options, "close_date": close_date
+        "name": tail[0].lower(), "desc": tail[1], "options": options, "close_date": close_date
     }
