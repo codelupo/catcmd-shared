@@ -344,7 +344,7 @@ class CmdSoundboard(ChatCmd):
     command: Literal["soundboard", "sb"]
     sound: Literal[
         "9000", "meow", "wawa", "xeno", "spongebob_horn", "ring", "dun_dunnn", 
-        "few_moments_later", "noot", "noot_horror",
+        "few_moments_later", "noot", "noot_horror", "trobbio",
     ]
     cost: ClassVar[int] = 50
     cd_global: ClassVar[int] = 15
